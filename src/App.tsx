@@ -1,9 +1,25 @@
-import { Button } from './components/ui/button';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+
+import { HomeTemplate } from './layout/HomeTemplate';
+import { Home } from '@/pages/Home';
+import { Shelf } from '@/pages/Shelf';
 
 function App() {
+   const routers = createBrowserRouter([
+      {
+         element: <HomeTemplate />,
+         children: [
+            {
+               path: '/',
+               element: <Home />,
+            },
+            { path: '/myshelf', element: <Shelf /> },
+         ],
+      },
+   ]);
    return (
       <>
-         <Button variant={'destructive'}>HEJ</Button>
+         <RouterProvider router={routers}></RouterProvider>
       </>
    );
 }
