@@ -1,19 +1,18 @@
 import { BookStore } from '@/store/Bookstore';
 import { BookPreview } from './BookPreview';
-import { fetchData } from '@/api/fetchData';
+import { book } from '@/types/responseType';
 
 type BookGrid = {};
 
 export const BookGrid: React.FC<BookGrid> = () => {
-   const { data, loading } = BookStore();
-   console.log('GRID', data, loading);
-   return (
-      <section className="bg-slate-300">
-         <h1>Your search result</h1>
+   const { data } = BookStore();
+   console.log(data);
 
-         <article className="grid ">
-            <BookPreview />
-         </article>
+   return (
+      <section className=" grid sm:grid-cols-3 grid-cols-2 max-h-full gap-2 overflow-y-auto ">
+         {data.map((book, index) => (
+            <BookPreview book={book} key={index} />
+         ))}
       </section>
    );
 };

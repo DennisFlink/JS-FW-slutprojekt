@@ -1,5 +1,23 @@
-type BookPreview = {};
+import { book } from '@/types/responseType';
+import { getBookId } from '@/utils/formatFunctions';
+import { Link } from 'react-router-dom';
 
-export const BookPreview: React.FC<BookPreview> = () => {
-   return <></>;
+type BookPreview = {
+   book: book;
+};
+
+export const BookPreview: React.FC<BookPreview> = ({ book }) => {
+   const bookWithCovers = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : 'cover_not_found.jpg';
+
+   const authors = book.author_name?.join(' ');
+
+   return (
+      <Link to={`/book/${book.id}`}>
+         <div id={book.key} className="min-w-36 h-72 p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col items-center justify-start gap-2 ">
+            <img src={bookWithCovers} alt="Book Cover Image" className=" block size-48 object-contain" />
+            <h1 className="text-sm text-wrap w-full text-center ">{book.title}</h1>
+            <h2 className="text-xs">Author: {authors}</h2>
+         </div>
+      </Link>
+   );
 };

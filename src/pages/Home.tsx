@@ -9,7 +9,9 @@ export const Home: React.FC<Home> = () => {
          <div className="container flex w-full">
             <SearchInput></SearchInput>
          </div>
-         <BookGrid></BookGrid>
+         <div className="h-full mt-6">
+            <BookGrid></BookGrid>
+         </div>
       </section>
    );
 };

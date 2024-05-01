@@ -9,7 +9,7 @@ export const HomeTemplate: React.FC<HomeTemplate> = () => {
       <>
          <Header></Header>
 
-         <main className=" mx-4 bg-slate-50 mt-6">
+         <main className=" mx-4 mt-6">
             <Outlet />
          </main>
       </>
