@@ -1,32 +1,64 @@
-import { BookStore } from '@/store/Bookstore';
+import { useBookStore } from '@/store/useBookstore';
 import { findBookById } from '@/utils/findBookById';
 import { getBookId } from '@/utils/formatFunctions';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
+import cover_not_found from '@/assets/cover_not_found.jpg';
+import { Button } from '../ui/button';
+import { Heart, Book, NotebookPen } from 'lucide-react';
 type BookDisplay = {};
 
 export const BookDisplay: React.FC<BookDisplay> = () => {
-   const { data } = BookStore();
+   const { data, fetchBookDetail, bookDetails } = useBookStore();
    const parens = useParams<{ id: string }>();
    const book = findBookById(data, parens.id);
 
    const authors = book?.author_name?.join(' ');
-   const bookWithCovers = book?.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : 'cover_not_found.jpg';
 
-   const bookKey = getBookId(book?.key);
+   const bookWithCovers = book?.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : cover_not_found;
 
-   console.log(book);
+   useEffect(() => {
+      if (book) {
+         const bookId = getBookId(book.key);
+         if (bookId) {
+            fetchBookDetail(bookId);
+         }
+      }
+   }, [book, fetchBookDetail]);
+
+   console.log('BOOOKDETAIL', bookDetails.description?.value);
    return (
       <>
          {book ? (
-            <section className=" bg-slate-200">
+            <section className=" bg-zinc-200 rounded-lg p-2">
                <div className="p-1">
                   <h1 className="text-6xl font-semibold">{book.title}</h1>
-                  <h3 className="text-2xl mx-1 mt-2">by: {authors}</h3>
+                  <h2 className="italic text-xl my-2">{bookDetails.subtitle ? bookDetails.subtitle.charAt(0).toUpperCase() + bookDetails.subtitle.slice(1) : ''}</h2>
+                  <h3 className="text-xl mx-1 mt-2">by: {authors}</h3>
                </div>
                <div className="w-full flex justify-center pt-4">
-                  <img src={bookWithCovers} alt="" />
+                  <img src={bookWithCovers} alt="Book Cover Image" className=" block size-48 object-contain" />
+               </div>
+               <div className="   w-full p-2 mx-auto flex flex-col items-center">
+                  <div className=" w-60  flex justify-between py-2">
+                     <Button>
+                        <Book className="mr-2 h-4 w-4" />
+                        READ IT
+                     </Button>
+                     <Button>
+                        <Heart className="mr-2 h-4 w-4" />
+                        LOVE IT
+                     </Button>
+                  </div>
+                  <div className=" w-60 flex justify-center">
+                     <Button>
+                        <NotebookPen className="mr-2 h-4 w-4" />
+                        REVIEW
+                     </Button>
+                  </div>
+               </div>
+               <div className="p-2">
+                  <h3>{bookDetails.description?.value ? bookDetails.description.value : 'Sorry, No Description 😢'}</h3>
                </div>
             </section>
          ) : (

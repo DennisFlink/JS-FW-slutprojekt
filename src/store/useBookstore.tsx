@@ -1,13 +1,13 @@
 import { create } from 'zustand';
-import { book } from '@/types/responseType';
+import { book, bookDetailData, responseType } from '@/types/responseType';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchBooks } from '@/api/fetchBooks';
-export type SearchResult = {};
 
 export type State = {
    searchTerm: string;
    id: string;
    data: book[];
+   bookDetails: bookDetailData;
    loading: boolean;
    error: boolean;
    setId: (id: string) => void;
@@ -20,6 +20,7 @@ const initialState: State = {
    searchTerm: '',
    id: '',
    data: [],
+   bookDetails: {} as bookDetailData,
    loading: false,
    error: false,
    setId: () => {},
@@ -28,7 +29,7 @@ const initialState: State = {
    fetchBookDetail: async () => {},
 };
 
-export const BookStore = create<State>((set) => ({
+export const useBookStore = create<State>((set) => ({
    ...initialState,
    setSearchTerm: (searchTerm: string) => set({ searchTerm }),
    setId: (id: string) => set({ id }),
@@ -46,12 +47,11 @@ export const BookStore = create<State>((set) => ({
    fetch: async () => {
       set(() => ({ loading: true }));
       try {
-         const searchQuery = BookStore.getState().searchTerm;
-         const responseData = await fetchBooks(searchQuery, 'http://openlibrary.org/search.json?title=');
+         const searchQuery = useBookStore.getState().searchTerm;
+         const responseData: responseType = await fetchBooks(searchQuery, 'http://openlibrary.org/search.json?title=');
          const first20Books = responseData.docs.slice(0, 20);
-
          const bookUuid = first20Books.map((book) => ({ ...book, id: uuidv4() }));
-         console.log(bookUuid);
+
          set(() => ({ data: bookUuid, loading: false }));
       } catch (err) {
          set(() => ({ hasErrors: true, loading: false }));
@@ -60,8 +60,10 @@ export const BookStore = create<State>((set) => ({
    fetchBookDetail: async (bookId: string) => {
       set(() => ({ loading: true }));
       try {
-         const idQuery = BookStore.getState().id;
-         const responseData = await fetchBooks(idQuery, 'https://openlibrary.org/works/');
+         const responseData = await fetchBooks<bookDetailData>(bookId, 'https://openlibrary.org/works/', true);
+         console.log('BOOKSTORE', responseData);
+
+         set(() => ({ bookDetails: responseData, loading: false }));
       } catch (err) {
          set(() => ({ hasErrors: true, loading: false }));
       }

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '../ui/input';
-import { BookStore } from '@/store/Bookstore';
+import { useBookStore } from '@/store/useBookstore';
 
 export const FormSchema = z.object({
    title: z.string().min(1),
@@ -15,7 +15,7 @@ type SearchInput = {};
 export type formType = z.infer<typeof FormSchema>;
 
 export const SearchInput: React.FC<SearchInput> = () => {
-   const { setSearchTerm, searchTerm, fetch, data } = BookStore();
+   const { setSearchTerm, fetch } = useBookStore();
 
    const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
@@ -26,7 +26,7 @@ export const SearchInput: React.FC<SearchInput> = () => {
    });
    const onSubmit = async (data: z.infer<typeof FormSchema>) => {
       setSearchTerm(data.title);
-      const updatedSearchTerm = await new Promise((resolve) => resolve(BookStore.getState().searchTerm));
+      const updatedSearchTerm = useBookStore.getState().searchTerm;
       console.log(updatedSearchTerm);
       if (updatedSearchTerm) {
          await fetch();

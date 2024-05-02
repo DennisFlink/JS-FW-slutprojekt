@@ -1,11 +1,8 @@
-import { BookStore } from '@/store/Bookstore';
+import { useBookStore } from '@/store/useBookstore';
 import { BookPreview } from './BookPreview';
-import { book } from '@/types/responseType';
 
-type BookGrid = {};
-
-export const BookGrid: React.FC<BookGrid> = () => {
-   const { data } = BookStore();
+export const BookGrid = () => {
+   const { data } = useBookStore();
    console.log(data);
 
    return (

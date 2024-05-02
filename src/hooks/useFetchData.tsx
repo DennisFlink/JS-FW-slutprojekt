@@ -1,4 +1,4 @@
-import { BookStore } from '@/store/Bookstore';
+import { BookStore } from '@/store/useBookstore';
 import { FetchParams } from '@/types/fetchParams';
 import axios, { AxiosError } from 'axios';
 import { useReducer } from 'react';

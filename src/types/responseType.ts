@@ -15,6 +15,15 @@ export type book = {
    publish_date?: string;
 };
 export interface author {}
+
 export type responseType = {
    docs: book[];
+};
+
+export type descriptionData = { value: string };
+
+export type bookDetailData = {
+   title: string;
+   description?: descriptionData;
+   subtitle?: string;
 };

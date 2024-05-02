@@ -1,4 +1,4 @@
-import { BookStore } from '@/store/Bookstore';
+import { BookStore } from '@/store/useBookstore';
 import axios from 'axios';
 import { useState } from 'react';
 
