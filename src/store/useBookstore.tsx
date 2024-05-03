@@ -57,10 +57,10 @@ export const useBookStore = create<State>((set) => ({
          set(() => ({ hasErrors: true, loading: false }));
       }
    },
-   fetchBookDetail: async (bookId: string) => {
+   fetchBookDetail: async (bookKey: string) => {
       set(() => ({ loading: true }));
       try {
-         const responseData = await fetchBooks<bookDetailData>(bookId, 'https://openlibrary.org/works/', true);
+         const responseData = await fetchBooks<bookDetailData>(bookKey, 'https://openlibrary.org', true);
          console.log('BOOKSTORE', responseData);
 
          set(() => ({ bookDetails: responseData, loading: false }));

@@ -4,7 +4,6 @@ import { HomeTemplate } from './layout/HomeTemplate';
 import { Home } from '@/pages/Home';
 import { Shelf } from '@/pages/Shelf';
 import { BookDisplay } from './components/book/BookDisplay';
-import { BookReview } from './components/book/BookReview';
 
 function App() {
    const routers = createBrowserRouter([

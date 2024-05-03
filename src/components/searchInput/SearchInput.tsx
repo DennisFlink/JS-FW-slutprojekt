@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '../ui/input';
 import { useBookStore } from '@/store/useBookstore';
+import { useState } from 'react';
 
 export const FormSchema = z.object({
    title: z.string().min(1),
@@ -15,8 +16,7 @@ type SearchInput = {};
 export type formType = z.infer<typeof FormSchema>;
 
 export const SearchInput: React.FC<SearchInput> = () => {
-   const { setSearchTerm, fetch } = useBookStore();
-
+   const { setSearchTerm, fetch, loading } = useBookStore();
    const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       mode: 'onSubmit',
@@ -52,7 +52,16 @@ export const SearchInput: React.FC<SearchInput> = () => {
                   </FormItem>
                )}
             />
-            <Button type="submit">Search</Button>
+            <Button type="submit" disabled={loading}>
+               {loading ? (
+                  <>
+                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                     Searching...
+                  </>
+               ) : (
+                  'Search'
+               )}
+            </Button>
          </form>
       </Form>
    );

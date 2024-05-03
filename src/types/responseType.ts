@@ -5,7 +5,7 @@ export type book = {
    cover_i: number;
    first_publish_year: number;
    authors?: author[];
-   author_name?: author[];
+   author_name?: [];
    first_sentence?: string;
    isbn?: string[];
    lcc?: string[];
@@ -26,4 +26,5 @@ export type bookDetailData = {
    title: string;
    description?: descriptionData;
    subtitle?: string;
+   key: string;
 };

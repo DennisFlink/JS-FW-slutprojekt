@@ -1,6 +1,7 @@
 import { book } from '@/types/responseType';
 import cover_not_found from '@/assets/cover_not_found.jpg';
 import { Link } from 'react-router-dom';
+import { formatNames } from '@/utils/formatFunctions';
 
 type BookPreview = {
    book: book;
@@ -8,7 +9,7 @@ type BookPreview = {
 
 export const BookPreview: React.FC<BookPreview> = ({ book }) => {
    const bookWithCovers = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : cover_not_found;
-   const authors = book.author_name?.join(' ');
+   const authors = formatNames(book.author_name as string[]);
 
    return (
       <Link to={`/book/${book.id}`}>
