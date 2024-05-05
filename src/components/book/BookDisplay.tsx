@@ -1,6 +1,4 @@
 import { useBookStore } from '@/store/useBookstore';
-import { findBookById } from '@/utils/findBookById';
-import { formatNames, getBookId } from '@/utils/formatFunctions';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import cover_not_found from '@/assets/cover_not_found.jpg';
@@ -12,39 +10,48 @@ type BookDisplay = {};
 
 export const BookDisplay: React.FC<BookDisplay> = () => {
    const { isOpen, openDialog, closeDialog } = useDialog();
-   const { data, fetchBookDetail, bookDetails } = useBookStore();
+   const { fetchBookDetail, bookDetails, addToShelf, fetchAuthors } = useBookStore();
    const parens = useParams<{ id: string }>();
-   const book = findBookById(data, parens.id);
-   console.log(book);
-   const authors = formatNames(book?.author_name as string[]);
-   const bookWithCovers = book?.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : cover_not_found;
+   const bookCoverNumber: string | undefined = bookDetails?.covers?.[0];
+   const bookWithCovers = bookCoverNumber ? `https://covers.openlibrary.org/b/id/${bookCoverNumber}-M.jpg` : cover_not_found;
+   const authorsOfBook = bookDetails?.authors?.map((author) => author.author.key);
 
    useEffect(() => {
-      if (book) {
-         fetchBookDetail(book.key);
+      if (parens.id) {
+         fetchBookDetail(parens.id);
+         fetchAuthors;
       }
-   }, [book, fetchBookDetail]);
-   console.log(book?.id);
-   console.log('BOOOKDETAIL', bookDetails.description?.value);
+   }, [parens.id, fetchBookDetail, fetchAuthors]);
+   console.log(bookDetails);
+
+   const handleAddtoShelf = (shelfType: 'read' | 'favorites') => {
+      const isStored = useBookStore.getState().shelf[shelfType].some((storedBook) => storedBook.id === bookDetails.id);
+      console.log(isStored);
+      if (!isStored) {
+         const cover = bookCoverNumber || cover_not_found;
+         addToShelf(bookDetails, cover, shelfType);
+      } else console.warn('BOOK IS STORED');
+   };
+
    return (
       <>
-         {book ? (
+         {parens.id ? (
             <section className=" bg-zinc-200 rounded-lg p-2">
                <div className="p-1">
                   <h1 className="text-6xl font-semibold">{bookDetails.title}</h1>
                   <h2 className="italic text-xl my-2">{bookDetails.subtitle ? bookDetails.subtitle.charAt(0).toUpperCase() + bookDetails.subtitle.slice(1) : ''}</h2>
-                  <h3 className="text-xl mx-1 mt-2">by: {authors}</h3>
+                  <h3 className="text-xl mx-1 mt-2">by: {bookDetails.authors ? bookDetails.authors.map((author) => author.author.key).join(' ') : 'Unknown'}</h3>
                </div>
                <div className="w-full flex justify-center pt-4">
                   <img src={bookWithCovers} alt="Book Cover Image" className=" block size-48 object-contain" />
                </div>
                <div className="   w-full p-2 mx-auto flex flex-col items-center">
-                  <div className=" w-60  flex justify-between py-2">
-                     <Button>
+                  <div className=" w-60  flex justify-between py-2 gap-2">
+                     <Button onClick={() => handleAddtoShelf('read')}>
                         <Book className="mr-2 h-4 w-4" />
-                        READ IT
+                        MARK READ
                      </Button>
-                     <Button>
+                     <Button onClick={() => handleAddtoShelf('favorites')}>
                         <Heart className="mr-2 h-4 w-4" />
                         LOVE IT
                      </Button>

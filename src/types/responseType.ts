@@ -22,9 +22,18 @@ export type responseType = {
 
 export type descriptionData = { value: string };
 
+type Author = {
+   author: {
+      key: string;
+   };
+};
+
 export type bookDetailData = {
    title: string;
    description?: descriptionData;
    subtitle?: string;
    key: string;
+   id: string;
+   covers?: string[];
+   authors?: Author[];
 };

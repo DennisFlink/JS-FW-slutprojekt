@@ -1,9 +1,101 @@
+import { useBookStore } from '@/store/useBookstore';
+import { Card, CardContent } from '@/components/ui/card';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import cover_not_found from '@/assets/cover_not_found.jpg';
+import { useWindowSize } from '@/hooks/useWindowSize';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 type Shelf = {};
-
+/* 
+      TODO: FIXA ATT TA BORT FRÅN SHELF
+      *DONE
+       */
 export const Shelf: React.FC<Shelf> = () => {
+   const navigate = useNavigate();
+   const windowSize = useWindowSize();
+   const { shelf, removeFromShelf } = useBookStore();
+   console.log(shelf.favorites);
+
+   const handleClick = (id: string) => {
+      navigate(`/book/${id}`);
+   };
+
+   const handleRemove = (bookId: string, shelfType: 'read' | 'favorites') => {
+      removeFromShelf(bookId, shelfType);
+   };
    return (
-      <>
-         <h1>Hello im shelf</h1>
-      </>
+      <section className=" flex flex-col items-center justify-center gap-6 h-full ">
+         <h1 className=" text-left w-full ml-2">Read Books</h1>
+         <Carousel
+            opts={{
+               align: 'start',
+            }}
+            className="w-full max-w-sm"
+         >
+            <CarouselContent>
+               {shelf.read.length > 0 ? (
+                  shelf.read.map((book, index) => (
+                     <CarouselItem key={index} className="sm:basis-1/2 basis-1/3">
+                        <Card key={book.id || index}>
+                           <div className="flex justify-between p-1">
+                              <h1>{book.title}</h1>
+                              <Button variant="outline" onClick={() => handleRemove(book.id, 'read')}>
+                                 X
+                              </Button>
+                           </div>
+                           <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
+                              <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />
+                           </CardContent>
+                        </Card>
+                     </CarouselItem>
+                  ))
+               ) : (
+                  <p className="ml-6">No books in your Read shelf yet.</p>
+               )}
+            </CarouselContent>
+            {windowSize.width >= 500 ? (
+               <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+               </>
+            ) : null}
+         </Carousel>
+
+         <h1 className=" text-left w-full ml-2">Favorites</h1>
+         <Carousel
+            opts={{
+               align: 'start',
+            }}
+            className="w-full max-w-sm"
+         >
+            <CarouselContent>
+               {shelf.favorites.length > 0 ? (
+                  shelf.favorites.map((book, index) => (
+                     <CarouselItem key={index} className="sm:basis-1/2 basis-1/3">
+                        <Card key={book.id || index}>
+                           <div className="flex justify-between p-1">
+                              <h1>{book.title}</h1>
+                              <Button variant="outline" onClick={() => handleRemove(book.id, 'favorites')}>
+                                 X
+                              </Button>
+                           </div>
+                           <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
+                              <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />
+                           </CardContent>
+                        </Card>
+                     </CarouselItem>
+                  ))
+               ) : (
+                  <p className="ml-6">No books in your Favorite shelf yet.</p>
+               )}
+            </CarouselContent>
+            {windowSize.width >= 500 ? (
+               <>
+                  <CarouselPrevious />
+                  <CarouselNext />
+               </>
+            ) : null}
+         </Carousel>
+      </section>
    );
 };

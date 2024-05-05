@@ -24,6 +24,7 @@ export const SearchInput: React.FC<SearchInput> = () => {
          title: '',
       },
    });
+
    const onSubmit = async (data: z.infer<typeof FormSchema>) => {
       setSearchTerm(data.title);
       const updatedSearchTerm = useBookStore.getState().searchTerm;
