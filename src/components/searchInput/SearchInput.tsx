@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '../ui/input';
 import { useBookStore } from '@/store/useBookstore';
-import { useState } from 'react';
 
 export const FormSchema = z.object({
    title: z.string().min(1),
@@ -16,7 +15,7 @@ type SearchInput = {};
 export type formType = z.infer<typeof FormSchema>;
 
 export const SearchInput: React.FC<SearchInput> = () => {
-   const { setSearchTerm, fetch, loading } = useBookStore();
+   const { setSearchTerm, fetchSearchedBooks, loading } = useBookStore();
    const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       mode: 'onSubmit',
@@ -30,7 +29,7 @@ export const SearchInput: React.FC<SearchInput> = () => {
       const updatedSearchTerm = useBookStore.getState().searchTerm;
       console.log(updatedSearchTerm);
       if (updatedSearchTerm) {
-         await fetch();
+         await fetchSearchedBooks();
       } else {
          console.warn('Search term is empty');
       }

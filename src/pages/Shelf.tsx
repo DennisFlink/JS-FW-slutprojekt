@@ -30,7 +30,7 @@ export const Shelf: React.FC<Shelf> = () => {
             opts={{
                align: 'start',
             }}
-            className="w-full max-w-sm"
+            className="w-full max-w-sm min-h-80"
          >
             <CarouselContent>
                {shelf.read.length > 0 ? (
@@ -50,7 +50,9 @@ export const Shelf: React.FC<Shelf> = () => {
                      </CarouselItem>
                   ))
                ) : (
-                  <p className="ml-6">No books in your Read shelf yet.</p>
+                  <div className=" w-full h-48 flex items-center">
+                     <p className="text-center w-full">No books in your Read shelf yet.</p>
+                  </div>
                )}
             </CarouselContent>
             {windowSize.width >= 500 ? (
@@ -61,12 +63,12 @@ export const Shelf: React.FC<Shelf> = () => {
             ) : null}
          </Carousel>
 
-         <h1 className=" text-left w-full ml-2">Favorites</h1>
+         <h1 className="text-left w-full ml-2 ">Favorites</h1>
          <Carousel
             opts={{
                align: 'start',
             }}
-            className="w-full max-w-sm"
+            className="w-full max-w-sm min-h-80"
          >
             <CarouselContent>
                {shelf.favorites.length > 0 ? (
@@ -86,7 +88,9 @@ export const Shelf: React.FC<Shelf> = () => {
                      </CarouselItem>
                   ))
                ) : (
-                  <p className="ml-6">No books in your Favorite shelf yet.</p>
+                  <div className=" w-full h-48 flex items-center">
+                     <p className=" text-center w-full">No books in your Favorite shelf yet.</p>
+                  </div>
                )}
             </CarouselContent>
             {windowSize.width >= 500 ? (

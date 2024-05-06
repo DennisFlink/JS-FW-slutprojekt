@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@radix-ui/react-label';
 import { Button } from '../ui/button';
+import { ChangeEvent, useState } from 'react';
 
 type BookReview = {
    isopen: boolean;
@@ -9,6 +10,10 @@ type BookReview = {
 };
 
 export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
+   const [reviewText, setReviewText] = useState<string>('');
+   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+      setReviewText(event.currentTarget.value);
+   };
    return (
       <Dialog open={isopen} onOpenChange={onClose}>
          <DialogTrigger asChild>Open</DialogTrigger>
@@ -18,7 +23,7 @@ export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
                <DialogDescription>Add a review to the book</DialogDescription>
             </DialogHeader>
             <Label htmlFor="reviewtext">Your Review</Label>
-            <Textarea id="reviewtext" />
+            <Textarea id="reviewtext" value={reviewText} onChange={handleTextChange} />
             <DialogFooter className="sm:justify-end">
                <DialogClose asChild>
                   <Button type="button">Save</Button>
