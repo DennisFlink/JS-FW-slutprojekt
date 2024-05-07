@@ -6,7 +6,6 @@ import { Button } from '../ui/button';
 import { Heart, Book, NotebookPen } from 'lucide-react';
 import { useDialog } from '@/hooks/useDialog';
 import { BookReview } from './BookReviewDialog';
-import { formatNames } from '@/utils/formatFunctions';
 type BookDisplay = {};
 
 export const BookDisplay: React.FC<BookDisplay> = () => {

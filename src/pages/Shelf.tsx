@@ -1,7 +1,7 @@
 import { useBookStore } from '@/store/useBookstore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import cover_not_found from '@/assets/cover_not_found.jpg';
+
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';

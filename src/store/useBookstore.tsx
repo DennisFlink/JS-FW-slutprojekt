@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { Author, authorResponse, book, bookDetailData, responseType } from '@/types/responseType';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchBooks } from '@/api/fetchBooks';
+import { ReviewWithId } from '@/components/book/BookReviewDialog';
 
 /* 
 TODO: SLICE THE STORE
@@ -24,18 +25,19 @@ export type State = {
       read: StoredBook[];
       favorites: StoredBook[];
    };
-
+   reviews: ReviewWithId[];
    setSearchTerm: (searchTerm: string) => void;
    fetchSearchedBooks: () => Promise<void>;
    fetchBookDetail: (bookId: string) => Promise<void>;
    fetchAuthors: (author: Author[]) => Promise<void>;
    addToShelf: (book: bookDetailData, bookCoverNumber: string, shelfType: 'read' | 'favorites') => void;
    removeFromShelf: (bookId: string, shelfType: 'read' | 'favorites') => void;
+   addReview: (review: ReviewWithId) => void;
+   updateReview: (updatedReview: ReviewWithId) => void;
 };
 
 const initialState: State = {
    searchTerm: '',
-
    data: [],
    bookDetails: {} as bookDetailData,
    loading: false,
@@ -44,17 +46,28 @@ const initialState: State = {
       read: [],
       favorites: [],
    },
+   reviews: [],
    setSearchTerm: () => {},
    fetchSearchedBooks: async () => {},
    fetchBookDetail: async () => {},
    fetchAuthors: async () => {},
    addToShelf: () => {},
    removeFromShelf: () => {},
+   addReview: () => {},
+   updateReview: () => {},
 };
 
 export const useBookStore = create<State>((set) => ({
    ...initialState,
+
    setSearchTerm: (searchTerm: string) => set({ searchTerm }),
+
+   addReview: (review: ReviewWithId) => {
+      console.log(review);
+      set((state) => ({
+         reviews: [...state.reviews, review],
+      }));
+   },
 
    fetchSearchedBooks: async () => {
       set(() => ({ loading: true }));
@@ -113,7 +126,6 @@ export const useBookStore = create<State>((set) => ({
          key: book.key,
          cover: bookCoverNumber,
       };
-      console.log(readBook);
       set((state) => ({
          shelf: {
             ...state.shelf,
