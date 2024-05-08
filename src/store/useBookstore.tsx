@@ -68,7 +68,13 @@ export const useBookStore = create<State>((set) => ({
          reviews: [...state.reviews, review],
       }));
    },
-
+   updateReview: (updatedReview: ReviewWithId) => {
+      set((state) => {
+         return {
+            reviews: state.reviews.map((review) => (review.id === updatedReview.id ? updatedReview : review)),
+         };
+      });
+   },
    fetchSearchedBooks: async () => {
       set(() => ({ loading: true }));
       try {

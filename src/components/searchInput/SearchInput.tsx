@@ -37,7 +37,7 @@ export const SearchInput: React.FC<SearchInput> = () => {
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full ">
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full h-full ">
             <FormField
                control={form.control}
                name="title"

@@ -22,9 +22,8 @@ type reviewData = z.infer<typeof reviewSchema>;
 export type ReviewWithId = reviewData & { id: string };
 
 export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
-   const { bookDetails, addReview, reviews } = useBookStore();
+   const { bookDetails, addReview, reviews, updateReview } = useBookStore();
    const existingReview = reviews.find((review) => review.id === bookDetails.id);
-   console.log(existingReview);
 
    const reviewForm = useForm<z.infer<typeof reviewSchema>>({
       resolver: zodResolver(reviewSchema),
@@ -38,9 +37,14 @@ export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
 
    const onSubmit = async (data: z.infer<typeof reviewSchema>) => {
       const reviewWithId: ReviewWithId = { ...data, id: bookDetails.id };
-      addReview(reviewWithId);
+      if (existingReview) {
+         updateReview(reviewWithId);
+         console.warn('THERE IS A REVIEW');
+      } else {
+         addReview(reviewWithId);
+      }
    };
-   console.log(reviews);
+
    return (
       <Dialog open={isopen} onOpenChange={onClose}>
          <DialogTrigger asChild>Open</DialogTrigger>

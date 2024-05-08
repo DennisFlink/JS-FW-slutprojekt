@@ -6,10 +6,7 @@ import { useWindowSize } from '@/hooks/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 type Shelf = {};
-/* 
-      TODO: FIXA ATT TA BORT FRÅN SHELF
-      *DONE
-       */
+
 export const Shelf: React.FC<Shelf> = () => {
    const navigate = useNavigate();
    const windowSize = useWindowSize();
