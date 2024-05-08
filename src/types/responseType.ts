@@ -38,6 +38,7 @@ export type bookDetailData = {
    authors: Author[];
    names: string[];
    authornames: string[];
+   subjects?: string[];
 };
 
 export type authorResponse = {

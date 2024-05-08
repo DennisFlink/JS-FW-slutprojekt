@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useBookStore } from '@/store/useBookstore';
 
 const reviewSchema = z.object({
-   reviewtext: z.string().max(50),
+   reviewtext: z.string().max(100),
    rating: z.coerce.number().min(1, 'Rating must be between 1 and 5').max(5, 'Rating must be between 1 and 5'),
    pages: z.coerce.number().min(1, 'Number of pages must be positive'),
 });
@@ -37,6 +37,7 @@ export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
 
    const onSubmit = async (data: z.infer<typeof reviewSchema>) => {
       const reviewWithId: ReviewWithId = { ...data, id: bookDetails.id };
+      console.log(data);
       if (existingReview) {
          updateReview(reviewWithId);
          console.warn('THERE IS A REVIEW');

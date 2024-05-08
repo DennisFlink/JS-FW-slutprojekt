@@ -6,9 +6,11 @@ import { Button } from '../ui/button';
 import { Heart, Book, NotebookPen } from 'lucide-react';
 import { useDialog } from '@/hooks/useDialog';
 import { BookReview } from './BookReviewDialog';
+import { useToast } from '@/components/ui/use-toast';
 type BookDisplay = {};
 
 export const BookDisplay: React.FC<BookDisplay> = () => {
+   const { toast } = useToast();
    const { isOpen, openDialog, closeDialog } = useDialog();
    const { fetchBookDetail, bookDetails, addToShelf } = useBookStore();
    const parens = useParams<{ id: string }>();
@@ -26,10 +28,18 @@ export const BookDisplay: React.FC<BookDisplay> = () => {
       if (!isStored) {
          const cover = bookCoverNumber || cover_not_found;
          addToShelf(bookDetails, cover, shelfType);
-      } else console.warn('BOOK IS STORED');
-      /* 
-         TODO: VISA FÖR ANVÄNDAREN MEDDELANDE IFALL BOKEN REDAN FINNS
-          */
+         toast({
+            title: 'Book is added 👍',
+            description: `Book is added in ${shelfType}`,
+            duration: 800,
+         });
+      } else {
+         toast({
+            title: 'Uh oh! Something went wrong.',
+            description: `Book is already stored in  ${shelfType}`,
+            duration: 800,
+         });
+      }
    };
 
    return (

@@ -1,102 +1,22 @@
-import { useBookStore } from '@/store/useBookstore';
-import { Card, CardContent } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Statistics } from '@/components/shelf/Statistics';
+import { StoredBooks } from '@/components/shelf/StoredBooks';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { useWindowSize } from '@/hooks/useWindowSize';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 type Shelf = {};
 
 export const Shelf: React.FC<Shelf> = () => {
-   const navigate = useNavigate();
-   const windowSize = useWindowSize();
-   const { shelf, removeFromShelf } = useBookStore();
-   console.log(shelf.favorites);
-
-   const handleClick = (id: string) => {
-      navigate(`/book/${id}`);
-   };
-
-   const handleRemove = (bookId: string, shelfType: 'read' | 'favorites') => {
-      removeFromShelf(bookId, shelfType);
-   };
    return (
-      <section className=" flex flex-col items-center justify-center gap-6 h-full ">
-         <h1 className=" text-left w-full ml-2">Read Books</h1>
-         <Carousel
-            opts={{
-               align: 'start',
-            }}
-            className="w-full max-w-sm min-h-80"
-         >
-            <CarouselContent>
-               {shelf.read.length > 0 ? (
-                  shelf.read.map((book, index) => (
-                     <CarouselItem key={index} className="sm:basis-1/2 basis-1/3">
-                        <Card key={book.id || index}>
-                           <div className="flex justify-between p-1">
-                              <h1>{book.title}</h1>
-                              <Button variant="outline" onClick={() => handleRemove(book.id, 'read')}>
-                                 X
-                              </Button>
-                           </div>
-                           <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
-                              <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />
-                           </CardContent>
-                        </Card>
-                     </CarouselItem>
-                  ))
-               ) : (
-                  <div className=" w-full h-48 flex items-center">
-                     <p className="text-center w-full">No books in your Read shelf yet.</p>
-                  </div>
-               )}
-            </CarouselContent>
-            {windowSize.width >= 500 ? (
-               <>
-                  <CarouselPrevious />
-                  <CarouselNext />
-               </>
-            ) : null}
-         </Carousel>
-
-         <h1 className="text-left w-full ml-2 ">Favorites</h1>
-         <Carousel
-            opts={{
-               align: 'start',
-            }}
-            className="w-full max-w-sm min-h-80"
-         >
-            <CarouselContent>
-               {shelf.favorites.length > 0 ? (
-                  shelf.favorites.map((book, index) => (
-                     <CarouselItem key={index} className="sm:basis-1/2 basis-1/3">
-                        <Card key={book.id || index}>
-                           <div className="flex justify-between p-1">
-                              <h1>{book.title}</h1>
-                              <Button variant="outline" onClick={() => handleRemove(book.id, 'favorites')}>
-                                 X
-                              </Button>
-                           </div>
-                           <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
-                              <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />
-                           </CardContent>
-                        </Card>
-                     </CarouselItem>
-                  ))
-               ) : (
-                  <div className=" w-full h-48 flex items-center">
-                     <p className=" text-center w-full">No books in your Favorite shelf yet.</p>
-                  </div>
-               )}
-            </CarouselContent>
-            {windowSize.width >= 500 ? (
-               <>
-                  <CarouselPrevious />
-                  <CarouselNext />
-               </>
-            ) : null}
-         </Carousel>
-      </section>
+      <Tabs defaultValue="books" className="w-full text-center">
+         <TabsList>
+            <TabsTrigger value="books">Books</TabsTrigger>
+            <TabsTrigger value="statistics">Statistics</TabsTrigger>
+         </TabsList>
+         <TabsContent value="books">
+            <StoredBooks></StoredBooks>
+         </TabsContent>
+         <TabsContent value="statistics">
+            <Statistics />
+         </TabsContent>
+      </Tabs>
    );
 };

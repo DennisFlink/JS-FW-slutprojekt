@@ -63,7 +63,6 @@ export const useBookStore = create<State>((set) => ({
    setSearchTerm: (searchTerm: string) => set({ searchTerm }),
 
    addReview: (review: ReviewWithId) => {
-      console.log(review);
       set((state) => ({
          reviews: [...state.reviews, review],
       }));

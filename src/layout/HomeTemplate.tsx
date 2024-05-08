@@ -8,8 +8,7 @@ export const HomeTemplate: React.FC<HomeTemplate> = () => {
    return (
       <>
          <Header></Header>
-
-         <main className=" mx-4 mt-6 h-screen">
+         <main className=" mx-4 mt-6">
             <Outlet />
          </main>
       </>
