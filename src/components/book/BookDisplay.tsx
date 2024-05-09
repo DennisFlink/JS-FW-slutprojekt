@@ -7,6 +7,8 @@ import { Heart, Book, NotebookPen } from 'lucide-react';
 import { useDialog } from '@/hooks/useDialog';
 import { BookReview } from './BookReviewDialog';
 import { useToast } from '@/components/ui/use-toast';
+import { Badge } from '@/components/ui/badge';
+
 type BookDisplay = {};
 
 export const BookDisplay: React.FC<BookDisplay> = () => {
@@ -45,7 +47,7 @@ export const BookDisplay: React.FC<BookDisplay> = () => {
    return (
       <>
          {parens.id ? (
-            <section className=" bg-zinc-200 rounded-lg p-2">
+            <section className="  rounded-lg p-2">
                <div className="p-1">
                   <h1 className="text-6xl font-semibold">{bookDetails.title}</h1>
                   <h2 className="italic text-xl my-2">{bookDetails.subtitle ? bookDetails.subtitle.charAt(0).toUpperCase() + bookDetails.subtitle.slice(1) : ''}</h2>
@@ -72,8 +74,13 @@ export const BookDisplay: React.FC<BookDisplay> = () => {
                      </Button>
                   </div>
                </div>
-               <div className="p-2">
+               <div className="p-4">
                   <h3>{bookDetails.description?.value ? bookDetails.description.value : 'Sorry, No Description 😢'}</h3>
+               </div>
+               <div className="flex flex-wrap gap-2">
+                  {bookDetails.subjects?.slice(0, 10).map((item, index) => (
+                     <Badge key={index}>{item}</Badge>
+                  ))}
                </div>
                <BookReview isopen={isOpen} onClose={closeDialog}></BookReview>
             </section>

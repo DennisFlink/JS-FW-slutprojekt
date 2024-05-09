@@ -11,7 +11,6 @@ export const StoredBooks: React.FC<StoredBooks> = () => {
    const navigate = useNavigate();
    const windowSize = useWindowSize();
    const { shelf, removeFromShelf } = useBookStore();
-   console.log(shelf.favorites);
 
    const handleClick = (id: string) => {
       navigate(`/book/${id}`);
@@ -36,9 +35,6 @@ export const StoredBooks: React.FC<StoredBooks> = () => {
                         <Card key={book.id || index}>
                            <div className="flex justify-between p-1">
                               <h1>{book.title}</h1>
-                              <Button variant="outline" onClick={() => handleRemove(book.id, 'read')}>
-                                 X
-                              </Button>
                            </div>
                            <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
                               <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />

@@ -4,7 +4,6 @@ type Statistics = {};
 
 export const Statistics: React.FC<Statistics> = () => {
    const { shelf, reviews } = useBookStore();
-   console.log(reviews.map((i) => i.pages));
    const totalPages = reviews.reduce((accumulator, review) => accumulator + review.pages, 0);
 
    return (

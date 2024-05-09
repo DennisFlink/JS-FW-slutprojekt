@@ -7,6 +7,7 @@ import { Input } from '../ui/input';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useBookStore } from '@/store/useBookstore';
+import { useToast } from '../ui/use-toast';
 
 const reviewSchema = z.object({
    reviewtext: z.string().max(100),
@@ -22,6 +23,7 @@ type reviewData = z.infer<typeof reviewSchema>;
 export type ReviewWithId = reviewData & { id: string };
 
 export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
+   const { toast } = useToast();
    const { bookDetails, addReview, reviews, updateReview } = useBookStore();
    const existingReview = reviews.find((review) => review.id === bookDetails.id);
 
@@ -40,9 +42,18 @@ export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
       console.log(data);
       if (existingReview) {
          updateReview(reviewWithId);
-         console.warn('THERE IS A REVIEW');
+         toast({
+            title: 'Review updated succcessfully!',
+            description: `Review is updated`,
+            duration: 1000,
+         });
       } else {
          addReview(reviewWithId);
+         toast({
+            title: 'Thank you for your review',
+            description: `Review is added`,
+            duration: 1000,
+         });
       }
    };
 

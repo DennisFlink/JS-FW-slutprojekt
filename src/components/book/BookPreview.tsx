@@ -11,9 +11,6 @@ export const BookPreview: React.FC<BookPreview> = ({ book }) => {
    const bookWithCovers = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : cover_not_found;
    const authors = formatNames(book.author_name as string[]);
 
-   /*
-    * Använder works id för böckerna
-    */
    const keys = book.key.split('/works/')[1];
 
    return (
