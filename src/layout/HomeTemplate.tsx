@@ -2,9 +2,7 @@ import { Header } from '@/components/header/Header';
 
 import { Outlet } from 'react-router-dom';
 
-type HomeTemplate = {};
-
-export const HomeTemplate: React.FC<HomeTemplate> = () => {
+export const HomeTemplate = () => {
    return (
       <>
          <Header></Header>

@@ -1,10 +1,11 @@
 import { useBookStore } from '@/store/useBookstore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-
+import cover_not_found from '@/assets/cover_not_found.jpg';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { number } from 'zod';
 type StoredBooks = {};
 
 export const StoredBooks: React.FC<StoredBooks> = () => {
@@ -19,6 +20,7 @@ export const StoredBooks: React.FC<StoredBooks> = () => {
    const handleRemove = (bookId: string, shelfType: 'read' | 'favorites') => {
       removeFromShelf(bookId, shelfType);
    };
+   console.log(shelf);
    return (
       <section className=" flex flex-col items-center justify-center gap-6 h-full ">
          <h1 className=" text-left w-full ml-2">Read Books</h1>
@@ -37,7 +39,7 @@ export const StoredBooks: React.FC<StoredBooks> = () => {
                               <h1>{book.title}</h1>
                            </div>
                            <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
-                              <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />
+                              {typeof book.cover === 'number' ? <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" /> : <img src={book.cover} alt="No Cover" />}
                            </CardContent>
                         </Card>
                      </CarouselItem>
@@ -70,12 +72,12 @@ export const StoredBooks: React.FC<StoredBooks> = () => {
                         <Card key={book.id || index}>
                            <div className="flex justify-between p-1">
                               <h1>{book.title}</h1>
-                              <Button variant="outline" onClick={() => handleRemove(book.id, 'favorites')}>
+                              <Button variant="outline" onClick={() => handleRemove(book.id, 'favorites')} className=" p-2 py-1 text-xl">
                                  X
                               </Button>
                            </div>
                            <CardContent className="flex aspect-square items-center justify-center p-2" onClick={() => handleClick(book.id)}>
-                              <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" />
+                              {typeof book.cover === 'number' ? <img src={`https://covers.openlibrary.org/b/id/${book.cover}-M.jpg`} alt="" /> : <img src={book.cover} alt="No Cover" />}
                            </CardContent>
                         </Card>
                      </CarouselItem>

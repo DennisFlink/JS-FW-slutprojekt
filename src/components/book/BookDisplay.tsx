@@ -74,10 +74,10 @@ export const BookDisplay: React.FC<BookDisplay> = () => {
                      </Button>
                   </div>
                </div>
-               <div className="p-4">
+               <div className="p-4 w-full text-center">
                   <h3>{bookDetails.description?.value ? bookDetails.description.value : 'Sorry, No Description 😢'}</h3>
                </div>
-               <div className="flex flex-wrap gap-2">
+               <div className="flex flex-wrap gap-2 w-full justify-center">
                   {bookDetails.subjects?.slice(0, 10).map((item, index) => (
                      <Badge key={index}>{item}</Badge>
                   ))}
