@@ -33,6 +33,7 @@ export type authorDetailResponse = {
    bio?: string;
    birth_date?: string;
 };
+
 export type descriptionData = { value: string };
 
 export type Author = {

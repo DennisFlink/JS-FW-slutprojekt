@@ -13,10 +13,9 @@ export const FormSchema = z.object({
    selection: z.string(),
 });
 
-type SearchInput = {};
 export type formType = z.infer<typeof FormSchema>;
 
-export const SearchInput: React.FC<SearchInput> = () => {
+export const SearchInput = () => {
    const { setSearchTerm, fetchSearchedBooks, loading, fetchAuthors } = useBookStore();
    const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),

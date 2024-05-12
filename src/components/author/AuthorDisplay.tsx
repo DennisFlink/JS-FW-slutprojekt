@@ -3,11 +3,12 @@ import { Book, Heart, NotebookPen, Badge } from 'lucide-react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../ui/button';
+import { createShelfAuthor } from '@/utils/createShelfAuthor';
 
 type AuthorDisplay = {};
 
 export const AuthorDisplay: React.FC<AuthorDisplay> = () => {
-   const { fetchAuthorDetail, authorDetails } = useBookStore();
+   const { fetchAuthorDetail, authorDetails, addToShelf } = useBookStore();
    const parens = useParams<{ id: string }>();
    useEffect(() => {
       if (parens.id) {
@@ -15,6 +16,14 @@ export const AuthorDisplay: React.FC<AuthorDisplay> = () => {
       }
    }, [parens.id, fetchAuthorDetail]);
 
+   const handleAddtoShelf = (shelfType: 'author') => {
+      console.log(authorDetails);
+      const isStored = useBookStore.getState().shelf[shelfType].some((storedAuthor) => storedAuthor.id?.split('/authors/')[1] === parens.id);
+      if (!isStored) {
+         const authorShelf = createShelfAuthor(authorDetails);
+         addToShelf(authorShelf, '1', shelfType);
+      }
+   };
    return (
       <>
          {parens.id ? (
@@ -26,7 +35,7 @@ export const AuthorDisplay: React.FC<AuthorDisplay> = () => {
                <div className="w-full flex justify-center pt-4">
                   <div className="p-4 w-full  flex flex-col items-center gap-4   ">
                      <h3>{authorDetails.bio ? authorDetails.bio : 'Sorry, No Description 😢'}</h3>
-                     <Button className=" w-2/4">
+                     <Button className=" w-2/4" onClick={() => handleAddtoShelf('author')}>
                         <Heart className="mr-2 h-4 w-4" />
                         Add to favorites
                      </Button>

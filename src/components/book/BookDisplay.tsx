@@ -8,17 +8,16 @@ import { useDialog } from '@/hooks/useDialog';
 import { BookReview } from './BookReviewDialog';
 import { useToast } from '@/components/ui/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { createShelfBook } from '@/utils/createShelfBook';
 
-type BookDisplay = {};
-
-export const BookDisplay: React.FC<BookDisplay> = () => {
+export const BookDisplay = () => {
    const { toast } = useToast();
    const { isOpen, openDialog, closeDialog } = useDialog();
    const { fetchBookDetail, bookDetails, addToShelf } = useBookStore();
    const parens = useParams<{ id: string }>();
    const bookCoverNumber: string | undefined = bookDetails?.covers?.[0];
    const bookWithCovers = bookCoverNumber ? `https://covers.openlibrary.org/b/id/${bookCoverNumber}-M.jpg` : cover_not_found;
-   console.log(bookDetails);
+
    useEffect(() => {
       if (parens.id) {
          fetchBookDetail(parens.id);
@@ -29,7 +28,8 @@ export const BookDisplay: React.FC<BookDisplay> = () => {
       const isStored = useBookStore.getState().shelf[shelfType].some((storedBook) => storedBook.id === bookDetails.id);
       if (!isStored) {
          const cover = bookCoverNumber || cover_not_found;
-         addToShelf(bookDetails, cover, shelfType);
+         const shelfBook = createShelfBook(bookDetails);
+         addToShelf(shelfBook, cover, shelfType);
          toast({
             title: 'Book is added 👍',
             description: `Book is added in ${shelfType}`,

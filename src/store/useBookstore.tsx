@@ -15,9 +15,17 @@ export type StoredBook = {
    cover: string;
 };
 export type storedAuthor = {
+   id: string;
    name: string;
    bio?: string;
    birth_date?: string;
+};
+export type StoredItem = {
+   id: string;
+   title?: string;
+   key?: string;
+   name?: string;
+   cover?: string;
 };
 export type State = {
    searchTerm: { term: string; selection: string };
@@ -28,9 +36,9 @@ export type State = {
    loading: boolean;
    error: boolean;
    shelf: {
-      read: StoredBook[];
-      favorites: StoredBook[];
-      authorFavorites: storedAuthor[];
+      read: StoredItem[];
+      favorites: StoredItem[];
+      author: StoredItem[];
    };
    reviews: ReviewWithId[];
    setSearchTerm: (searchTerm: { term: string; selection: string }) => void;
@@ -38,8 +46,8 @@ export type State = {
    fetchBookDetail: (bookId: string) => Promise<void>;
    fetchAuthors: () => Promise<void>;
    fetchAuthorDetail: (authorId: string) => Promise<void>;
-   addToShelf: (book: bookDetailData, bookCoverNumber: string, shelfType: 'read' | 'favorites | author') => void;
-   removeFromShelf: (bookId: string, shelfType: 'read' | 'favorites | author') => void;
+   addToShelf: (item: StoredItem, bookCoverNumber: string, shelfType: 'read' | 'favorites' | 'author') => void;
+   removeFromShelf: (bookId: string, shelfType: 'read' | 'favorites' | 'author') => void;
    addReview: (review: ReviewWithId) => void;
    updateReview: (updatedReview: ReviewWithId) => void;
 };
@@ -58,7 +66,7 @@ const initialState: State = {
    shelf: {
       read: [],
       favorites: [],
-      authorFavorites: [],
+      author: [],
    },
    reviews: [],
    setSearchTerm: () => {},
@@ -141,25 +149,26 @@ export const useBookStore = create<State>((set) => ({
          set(() => ({ hasErrors: true, loading: false }));
       }
    },
-   addToShelf: (book: bookDetailData, bookCoverNumber: string, shelfType: 'read' | 'favorites') => {
-      const readBook: StoredBook = {
-         id: book.id,
-         title: book.title,
-         key: book.key,
+   addToShelf: (item: StoredItem, bookCoverNumber: string, shelfType: 'read' | 'favorites' | 'author') => {
+      const storeItem: StoredItem = {
+         id: item.id,
+         title: item.title,
+         name: item.name,
+         key: item.key,
          cover: bookCoverNumber,
       };
       set((state) => ({
          shelf: {
             ...state.shelf,
-            [shelfType]: [...state.shelf[shelfType], readBook],
+            [shelfType]: [...state.shelf[shelfType], storeItem],
          },
       }));
    },
-   removeFromShelf: (bookId: string, shelfType: 'read' | 'favorites') => {
+   removeFromShelf: (itemID: string, shelfType: 'read' | 'favorites' | 'author') => {
       set((state) => ({
          shelf: {
             ...state.shelf,
-            [shelfType]: [...state.shelf[shelfType].filter((book) => book.id !== bookId)],
+            [shelfType]: [...state.shelf[shelfType].filter((item) => item.id !== itemID)],
          },
       }));
    },

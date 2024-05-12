@@ -1,14 +1,11 @@
 import { useBookStore } from '@/store/useBookstore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import cover_not_found from '@/assets/cover_not_found.jpg';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { number } from 'zod';
-type StoredBooks = {};
 
-export const StoredBooks: React.FC<StoredBooks> = () => {
+export const StoredBooks = () => {
    const navigate = useNavigate();
    const windowSize = useWindowSize();
    const { shelf, removeFromShelf } = useBookStore();
@@ -20,7 +17,6 @@ export const StoredBooks: React.FC<StoredBooks> = () => {
    const handleRemove = (bookId: string, shelfType: 'read' | 'favorites') => {
       removeFromShelf(bookId, shelfType);
    };
-   console.log(shelf);
    return (
       <section className=" flex flex-col items-center justify-center gap-6 h-full ">
          <h1 className=" text-left w-full ml-2">Read Books</h1>
