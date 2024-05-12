@@ -4,6 +4,7 @@ import { HomeTemplate } from './layout/HomeTemplate';
 import { Home } from '@/pages/Home';
 import { Shelf } from '@/pages/Shelf';
 import { BookDisplay } from './components/book/BookDisplay';
+import { AuthorDisplay } from './components/author/AuthorDisplay';
 
 function App() {
    const routers = createBrowserRouter([
@@ -19,6 +20,7 @@ function App() {
                path: '/book/:id',
                element: <BookDisplay />,
             },
+            { path: '/author/:id', element: <AuthorDisplay></AuthorDisplay> },
          ],
       },
    ]);

@@ -4,55 +4,80 @@ import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '../ui/input';
 import { useBookStore } from '@/store/useBookstore';
 
 export const FormSchema = z.object({
-   title: z.string().min(1),
+   term: z.string().min(1),
+   selection: z.string(),
 });
 
 type SearchInput = {};
 export type formType = z.infer<typeof FormSchema>;
 
 export const SearchInput: React.FC<SearchInput> = () => {
-   const { setSearchTerm, fetchSearchedBooks, loading } = useBookStore();
+   const { setSearchTerm, fetchSearchedBooks, loading, fetchAuthors } = useBookStore();
    const form = useForm<z.infer<typeof FormSchema>>({
       resolver: zodResolver(FormSchema),
       mode: 'onSubmit',
       defaultValues: {
-         title: '',
+         term: '',
+         selection: 'book',
       },
    });
 
    const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-      setSearchTerm(data.title);
-      const updatedSearchTerm = useBookStore.getState().searchTerm;
+      console.log(data);
+      setSearchTerm(data);
+      const updatedSearchTerm = useBookStore.getState().searchTerm.term;
 
-      if (updatedSearchTerm) {
+      if (data.selection == 'book' && updatedSearchTerm) {
          await fetchSearchedBooks();
-      } else {
-         console.warn('Search term is empty');
+      } else if (data.selection == 'author' && updatedSearchTerm) {
+         await fetchAuthors();
       }
    };
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full h-full ">
+         <form onSubmit={form.handleSubmit(onSubmit)} className=" container sm:grid grid-rows-2 grid-cols-[200px,auto] gap-2 flex flex-col sm:gap-4 ">
             <FormField
                control={form.control}
-               name="title"
+               name="selection"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Search for Book</FormLabel>
+                     <FormLabel>Select book or author</FormLabel>
+                     <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                           <SelectTrigger>
+                              <SelectValue placeholder="Select book or author" />
+                           </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                           <SelectItem value="book">Book</SelectItem>
+                           <SelectItem value="author">Author</SelectItem>
+                        </SelectContent>
+                     </Select>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="term"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Search</FormLabel>
                      <FormControl>
-                        <Input placeholder="Search for book" {...field} autoComplete="off" />
+                        <Input placeholder="Search" {...field} autoComplete="off" />
                      </FormControl>
 
                      <FormMessage />
                   </FormItem>
                )}
             />
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="col-start-2 sm:w-28 sm:self-center justify-self-center">
                {loading ? (
                   <>
                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />

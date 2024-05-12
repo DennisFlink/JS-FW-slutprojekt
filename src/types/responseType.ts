@@ -14,12 +14,25 @@ export type book = {
    number_of_pages?: number;
    publish_date?: string;
 };
-export interface author {}
+export type author = {
+   name: string;
+   birth_date?: string;
+   key?: string;
+};
 
 export type responseType = {
    docs: book[];
 };
 
+export type responeTypeAuthor = {
+   docs: author[];
+};
+
+export type authorDetailResponse = {
+   name: string;
+   bio?: string;
+   birth_date?: string;
+};
 export type descriptionData = { value: string };
 
 export type Author = {

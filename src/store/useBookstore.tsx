@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Author, authorResponse, book, bookDetailData, responseType } from '@/types/responseType';
+import { author, authorDetailResponse, authorResponse, book, bookDetailData, responeTypeAuthor, responseType } from '@/types/responseType';
 import { v4 as uuidv4 } from 'uuid';
 import { fetchBooks } from '@/api/fetchBooks';
 import { ReviewWithId } from '@/components/book/BookReviewDialog';
@@ -14,43 +14,58 @@ export type StoredBook = {
    key: string;
    cover: string;
 };
-
+export type storedAuthor = {
+   name: string;
+   bio?: string;
+   birth_date?: string;
+};
 export type State = {
-   searchTerm: string;
+   searchTerm: { term: string; selection: string };
    data: book[];
+   authorData: author[];
+   authorDetails: authorDetailResponse;
    bookDetails: bookDetailData;
    loading: boolean;
    error: boolean;
    shelf: {
       read: StoredBook[];
       favorites: StoredBook[];
+      authorFavorites: storedAuthor[];
    };
    reviews: ReviewWithId[];
-   setSearchTerm: (searchTerm: string) => void;
+   setSearchTerm: (searchTerm: { term: string; selection: string }) => void;
    fetchSearchedBooks: () => Promise<void>;
    fetchBookDetail: (bookId: string) => Promise<void>;
-   fetchAuthors: (author: Author[]) => Promise<void>;
-   addToShelf: (book: bookDetailData, bookCoverNumber: string, shelfType: 'read' | 'favorites') => void;
-   removeFromShelf: (bookId: string, shelfType: 'read' | 'favorites') => void;
+   fetchAuthors: () => Promise<void>;
+   fetchAuthorDetail: (authorId: string) => Promise<void>;
+   addToShelf: (book: bookDetailData, bookCoverNumber: string, shelfType: 'read' | 'favorites | author') => void;
+   removeFromShelf: (bookId: string, shelfType: 'read' | 'favorites | author') => void;
    addReview: (review: ReviewWithId) => void;
    updateReview: (updatedReview: ReviewWithId) => void;
 };
 
 const initialState: State = {
-   searchTerm: '',
+   searchTerm: {
+      term: '',
+      selection: '',
+   },
    data: [],
+   authorData: [],
+   authorDetails: {} as authorDetailResponse,
    bookDetails: {} as bookDetailData,
    loading: false,
    error: false,
    shelf: {
       read: [],
       favorites: [],
+      authorFavorites: [],
    },
    reviews: [],
    setSearchTerm: () => {},
    fetchSearchedBooks: async () => {},
    fetchBookDetail: async () => {},
    fetchAuthors: async () => {},
+   fetchAuthorDetail: async () => {},
    addToShelf: () => {},
    removeFromShelf: () => {},
    addReview: () => {},
@@ -60,7 +75,7 @@ const initialState: State = {
 export const useBookStore = create<State>((set) => ({
    ...initialState,
 
-   setSearchTerm: (searchTerm: string) => set({ searchTerm }),
+   setSearchTerm: (searchTerm: { term: string; selection: string }) => set({ searchTerm }),
 
    addReview: (review: ReviewWithId) => {
       set((state) => ({
@@ -78,7 +93,7 @@ export const useBookStore = create<State>((set) => ({
       set(() => ({ loading: true }));
       try {
          const searchQuery = useBookStore.getState().searchTerm;
-         const responseData = await fetchBooks<responseType>(searchQuery, 'http://openlibrary.org/search.json?title=');
+         const responseData = await fetchBooks<responseType>(searchQuery.term, 'http://openlibrary.org/search.json?title=');
          console.log(searchQuery);
          const first20Books = responseData.docs.slice(0, 20);
          const bookUuid = first20Books.map((book) => ({ ...book, id: uuidv4() }));
@@ -90,12 +105,7 @@ export const useBookStore = create<State>((set) => ({
    fetchBookDetail: async (bookId: string) => {
       set(() => ({ loading: true }));
       try {
-         /* 
-         ? Hur göra med url att den funkar både för föratte och boken
-         todo:FIXA DEN HÄR SKITEN PISS SKIT HELVETE
-         */
          const responseData = await fetchBooks<bookDetailData>(bookId, 'https://openlibrary.org/works/', true);
-
          const authorKeys = responseData.authors?.map((author) => author.author.key);
          const authornames: string[] = [];
          for (const authorKey of authorKeys) {
@@ -109,21 +119,28 @@ export const useBookStore = create<State>((set) => ({
          set(() => ({ hasErrors: true, loading: false }));
       }
    },
-   /*    fetchAuthors: async (authors: Author[] | undefined) => {
-      const mappingAuthors = authors?.map((auth) => auth.author.key);
-      console.log('Author ID', mappingAuthors);
+   fetchAuthors: async () => {
       set(() => ({ loading: true }));
-      
-      TODO: FIXA ATT ALLA KEYS ANVÄNDA LOOP
-      ? Ska jag använda samma funktioner?
-       
       try {
-         const responseData = await fetchBooks<bookDetailData>(authors, 'https://openlibrary.org', true);
-         set(() => ({ Author: responseData, loading: false }));
+         const searchQuery = useBookStore.getState().searchTerm;
+         const responseData = await fetchBooks<responeTypeAuthor>(searchQuery.term, 'https://openlibrary.org/search/authors.json?q=', false);
+         const first20Authors = responseData.docs.slice(0, 10);
+         console.log(first20Authors);
+         set(() => ({ authorData: first20Authors, loading: false }));
       } catch (err) {
          set(() => ({ hasErrors: true, loading: false }));
       }
-   }, */
+   },
+   fetchAuthorDetail: async (authorId: string) => {
+      set(() => ({ loading: true }));
+      try {
+         const responseData = await fetchBooks<authorDetailResponse>(authorId, 'https://openlibrary.org/authors/', true);
+         console.log(responseData);
+         set(() => ({ authorDetails: responseData, loading: false }));
+      } catch (err) {
+         set(() => ({ hasErrors: true, loading: false }));
+      }
+   },
    addToShelf: (book: bookDetailData, bookCoverNumber: string, shelfType: 'read' | 'favorites') => {
       const readBook: StoredBook = {
          id: book.id,
