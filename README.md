@@ -13,3 +13,15 @@ Reviews: BookHub allows users to write reviews for books they've read. Users can
 Favorites: Users can bookmark their favorite books for easy access later. BookHub provides a personalized experience by allowing users to keep track of their favorite reads.
 
 Statistics: BookHub offers statistics that display how many books users have read and who their most-read author is. This feature provides insights into users' reading habits and preferences.
+
+## Getting Started
+
+    ```bash
+    To run the BookHub app locally, follow these steps:
+
+    1. Clone the repository`
+    2. Navigate to the project directory: `cd bookhub`
+    3. Install dependencies: `npm install`
+    4. Start the development server: `npm start`
+    ```
+
