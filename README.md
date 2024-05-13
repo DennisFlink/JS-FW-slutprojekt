@@ -16,7 +16,7 @@ Statistics: BookHub offers statistics that display how many books users have rea
 
 ## Getting Started
 
-    ```bash
+    ```
     To run the BookHub app locally, follow these steps:
 
     1. Clone the repository`
@@ -24,4 +24,3 @@ Statistics: BookHub offers statistics that display how many books users have rea
     3. Install dependencies: `npm install`
     4. Start the development server: `npm start`
     ```
-
