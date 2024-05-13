@@ -15,7 +15,7 @@ export type StoredItem = {
    key?: string;
    name?: string;
    cover?: string;
-   authorNames: string[];
+   authorNames?: string[];
 };
 export type State = {
    searchTerm: { term: string; selection: string };

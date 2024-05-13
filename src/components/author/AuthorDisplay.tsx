@@ -13,7 +13,10 @@ export const AuthorDisplay = () => {
          fetchAuthorDetail(parens.id);
       }
    }, [parens.id, fetchAuthorDetail]);
+   /* 
+TODO:ADD TOAST FOR ADDING AUTHOR
 
+ */
    const handleAddtoShelf = (shelfType: 'author') => {
       console.log(authorDetails);
       const isStored = useBookStore.getState().shelf[shelfType].some((storedAuthor) => storedAuthor.id?.split('/authors/')[1] === parens.id);

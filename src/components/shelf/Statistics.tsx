@@ -7,7 +7,7 @@ export const Statistics = () => {
    const totalPages = reviews.reduce((accumulator, review) => accumulator + review.pages, 0);
    const totalRating = reviews.reduce((accumulator, review) => accumulator + review.rating, 0);
    const allAuthors: string[] = shelf.read.reduce((accumulator: string[], book) => {
-      const bookAuthors: string[] = book.authorNames;
+      const bookAuthors: string[] = book?.authorNames || [];
       return accumulator.concat(bookAuthors);
    }, []);
    const mostCommonAuthor = findMostCommonAuthor(allAuthors);
