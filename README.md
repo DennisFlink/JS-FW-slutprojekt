@@ -17,7 +17,7 @@ Statistics: BookHub offers statistics that display how many books users have rea
 ## Getting Started
 
     ```
-    To run the BookHub app locally, follow these steps:
+
 
     1. Clone the repository`
     2. Navigate to the project directory: `cd bookhub`
