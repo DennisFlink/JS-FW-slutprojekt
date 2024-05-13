@@ -1,16 +1,14 @@
-import { BookGrid } from '@/components/book/BookGrid';
+import { DisplayGrid } from '@/components/displayGrid/DisplayGrid';
 import { SearchInput } from '@/components/searchInput/SearchInput';
 
-type Home = {};
-
-export const Home: React.FC<Home> = () => {
+export const Home = () => {
    return (
       <section>
          <div className="container flex w-full">
             <SearchInput></SearchInput>
          </div>
          <div className="h-full mt-6">
-            <BookGrid></BookGrid>
+            <DisplayGrid></DisplayGrid>
          </div>
       </section>
    );

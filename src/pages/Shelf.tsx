@@ -3,9 +3,7 @@ import { StoredAuthors } from '@/components/shelf/StoredAuthors';
 import { StoredBooks } from '@/components/shelf/StoredBooks';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-type Shelf = {};
-
-export const Shelf: React.FC<Shelf> = () => {
+export const Shelf = () => {
    return (
       <Tabs defaultValue="books" className="w-full text-center">
          <TabsList>

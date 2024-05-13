@@ -1,8 +1,8 @@
 import { useBookStore } from '@/store/useBookstore';
-import { BookPreview } from './BookPreview';
+import { BookPreview } from '../book/BookPreview';
 import { AuthorPreview } from '../author/AuthorPreview';
 
-export const BookGrid = () => {
+export const DisplayGrid = () => {
    const {
       data,
       authorData,

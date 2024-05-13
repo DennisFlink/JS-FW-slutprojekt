@@ -92,7 +92,6 @@ export const useBookStore = create<State>((set) => ({
       try {
          const searchQuery = useBookStore.getState().searchTerm;
          const responseData = await fetchData<responseType>(searchQuery.term, 'http://openlibrary.org/search.json?title=');
-         console.log(searchQuery);
          const first20Books = responseData.docs.slice(0, 20);
          const bookUuid = first20Books.map((book) => ({ ...book, id: uuidv4() }));
          set(() => ({ data: bookUuid, loading: false }));
@@ -133,7 +132,6 @@ export const useBookStore = create<State>((set) => ({
       set(() => ({ loading: true }));
       try {
          const responseData = await fetchData<authorDetailResponse>(authorId, 'https://openlibrary.org/authors/', true);
-         console.log(responseData);
          set(() => ({ authorDetails: responseData, loading: false }));
       } catch (err) {
          set(() => ({ hasErrors: true, loading: false }));
