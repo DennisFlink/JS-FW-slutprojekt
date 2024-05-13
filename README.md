@@ -22,3 +22,7 @@ Statistics: BookHub offers statistics that display how many books users have rea
    3. Install dependencies: `npm install`
    4. Start the development server: `npm start`
 ```
+
+## Authors
+
+-  [@DennisFlink](https://www.github.com/DennisFlink)
