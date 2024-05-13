@@ -1,31 +1,21 @@
 import { create } from 'zustand';
 import { author, authorDetailResponse, authorResponse, book, bookDetailData, responeTypeAuthor, responseType } from '@/types/responseType';
 import { v4 as uuidv4 } from 'uuid';
-import { fetchBooks } from '@/api/fetchBooks';
+import { fetchData } from '@/api/fetchData';
 import { ReviewWithId } from '@/components/book/BookReviewDialog';
 
 /* 
 TODO: SLICE THE STORE
 * Kanske borde slice storen
  */
-export type StoredBook = {
-   id: string;
-   title: string;
-   key: string;
-   cover: string;
-};
-export type storedAuthor = {
-   id: string;
-   name: string;
-   bio?: string;
-   birth_date?: string;
-};
+
 export type StoredItem = {
    id: string;
    title?: string;
    key?: string;
    name?: string;
    cover?: string;
+   authorNames: string[];
 };
 export type State = {
    searchTerm: { term: string; selection: string };
@@ -101,7 +91,7 @@ export const useBookStore = create<State>((set) => ({
       set(() => ({ loading: true }));
       try {
          const searchQuery = useBookStore.getState().searchTerm;
-         const responseData = await fetchBooks<responseType>(searchQuery.term, 'http://openlibrary.org/search.json?title=');
+         const responseData = await fetchData<responseType>(searchQuery.term, 'http://openlibrary.org/search.json?title=');
          console.log(searchQuery);
          const first20Books = responseData.docs.slice(0, 20);
          const bookUuid = first20Books.map((book) => ({ ...book, id: uuidv4() }));
@@ -113,11 +103,11 @@ export const useBookStore = create<State>((set) => ({
    fetchBookDetail: async (bookId: string) => {
       set(() => ({ loading: true }));
       try {
-         const responseData = await fetchBooks<bookDetailData>(bookId, 'https://openlibrary.org/works/', true);
+         const responseData = await fetchData<bookDetailData>(bookId, 'https://openlibrary.org/works/', true);
          const authorKeys = responseData.authors?.map((author) => author.author.key);
          const authornames: string[] = [];
          for (const authorKey of authorKeys) {
-            const authorResponse = await fetchBooks<authorResponse>(authorKey, 'https://openlibrary.org', true);
+            const authorResponse = await fetchData<authorResponse>(authorKey, 'https://openlibrary.org', true);
             authornames.push(authorResponse.name);
          }
          const bookDetailsWithUUID = { ...responseData, id: bookId };
@@ -131,7 +121,7 @@ export const useBookStore = create<State>((set) => ({
       set(() => ({ loading: true }));
       try {
          const searchQuery = useBookStore.getState().searchTerm;
-         const responseData = await fetchBooks<responeTypeAuthor>(searchQuery.term, 'https://openlibrary.org/search/authors.json?q=', false);
+         const responseData = await fetchData<responeTypeAuthor>(searchQuery.term, 'https://openlibrary.org/search/authors.json?q=', false);
          const first20Authors = responseData.docs.slice(0, 10);
          console.log(first20Authors);
          set(() => ({ authorData: first20Authors, loading: false }));
@@ -142,7 +132,7 @@ export const useBookStore = create<State>((set) => ({
    fetchAuthorDetail: async (authorId: string) => {
       set(() => ({ loading: true }));
       try {
-         const responseData = await fetchBooks<authorDetailResponse>(authorId, 'https://openlibrary.org/authors/', true);
+         const responseData = await fetchData<authorDetailResponse>(authorId, 'https://openlibrary.org/authors/', true);
          console.log(responseData);
          set(() => ({ authorDetails: responseData, loading: false }));
       } catch (err) {
@@ -156,6 +146,7 @@ export const useBookStore = create<State>((set) => ({
          name: item.name,
          key: item.key,
          cover: bookCoverNumber,
+         authorNames: item.authorNames,
       };
       set((state) => ({
          shelf: {

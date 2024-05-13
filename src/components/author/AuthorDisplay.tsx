@@ -1,13 +1,11 @@
 import { useBookStore } from '@/store/useBookstore';
-import { Book, Heart, NotebookPen, Badge } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { createShelfAuthor } from '@/utils/createShelfAuthor';
 
-type AuthorDisplay = {};
-
-export const AuthorDisplay: React.FC<AuthorDisplay> = () => {
+export const AuthorDisplay = () => {
    const { fetchAuthorDetail, authorDetails, addToShelf } = useBookStore();
    const parens = useParams<{ id: string }>();
    useEffect(() => {

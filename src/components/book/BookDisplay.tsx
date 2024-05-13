@@ -34,12 +34,14 @@ export const BookDisplay = () => {
             title: 'Book is added 👍',
             description: `Book is added in ${shelfType}`,
             duration: 800,
+            className: 'w-[200px]',
          });
       } else {
          toast({
             title: 'Uh oh! Something went wrong.',
             description: `Book is already stored in  ${shelfType}`,
             duration: 800,
+            className: 'w-[200px]',
          });
       }
    };
@@ -49,7 +51,7 @@ export const BookDisplay = () => {
          {parens.id ? (
             <section className="  rounded-lg p-2">
                <div className="p-1">
-                  <h1 className="text-6xl font-semibold">{bookDetails.title}</h1>
+                  <h1 className="text-4xl font-semibold">{bookDetails.title}</h1>
                   <h2 className="italic text-xl my-2">{bookDetails.subtitle ? bookDetails.subtitle.charAt(0).toUpperCase() + bookDetails.subtitle.slice(1) : ''}</h2>
                   <h3 className="text-xl mx-1 mt-2">by: {bookDetails?.authornames ? bookDetails.authornames.join(' ') : 'Unknown'}</h3>
                </div>
@@ -74,8 +76,8 @@ export const BookDisplay = () => {
                      </Button>
                   </div>
                </div>
-               <div className="p-4 w-full text-center">
-                  <h3>{bookDetails.description?.value ? bookDetails.description.value : 'Sorry, No Description 😢'}</h3>
+               <div className="p-4  text-center">
+                  <h3 className="text-ellipsis overflow-x-hidden">{bookDetails.description?.value ? bookDetails.description.value : 'Sorry, No Description 😢'}</h3>
                </div>
                <div className="flex flex-wrap gap-2 w-full justify-center">
                   {bookDetails.subjects?.slice(0, 10).map((item, index) => (

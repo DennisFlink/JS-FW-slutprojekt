@@ -15,6 +15,7 @@ export type book = {
    publish_date?: string;
 };
 export type author = {
+   id?: string;
    name: string;
    birth_date?: string;
    key?: string;

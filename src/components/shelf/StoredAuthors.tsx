@@ -4,9 +4,8 @@ import { useBookStore } from '@/store/useBookstore';
 import { Card, CardContent } from '../ui/card';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
-type StoredAuthors = {};
 
-export const StoredAuthors: React.FC<StoredAuthors> = () => {
+export const StoredAuthors = () => {
    const windowSize = useWindowSize();
    const navigate = useNavigate();
    const { shelf, removeFromShelf } = useBookStore();

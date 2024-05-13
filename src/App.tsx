@@ -20,7 +20,7 @@ function App() {
                path: '/book/:id',
                element: <BookDisplay />,
             },
-            { path: '/author/:id', element: <AuthorDisplay></AuthorDisplay> },
+            { path: '/author/:id', element: <AuthorDisplay /> },
          ],
       },
    ]);
