@@ -27,10 +27,8 @@ export const SearchInput = () => {
    });
 
    const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-      console.log(data);
       setSearchTerm(data);
       const updatedSearchTerm = useBookStore.getState().searchTerm.term;
-
       if (data.selection == 'book' && updatedSearchTerm) {
          await fetchSearchedBooks();
       } else if (data.selection == 'author' && updatedSearchTerm) {
