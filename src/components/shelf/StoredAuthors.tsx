@@ -9,7 +9,6 @@ export const StoredAuthors = () => {
    const windowSize = useWindowSize();
    const navigate = useNavigate();
    const { shelf, removeFromShelf } = useBookStore();
-   console.log(shelf);
 
    const handleClick = (id: string) => {
       const authorId = id.split('/')[2];

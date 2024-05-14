@@ -4,8 +4,10 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { createShelfAuthor } from '@/utils/createShelfAuthor';
+import { useToast } from '../ui/use-toast';
 
 export const AuthorDisplay = () => {
+   const { toast } = useToast();
    const { fetchAuthorDetail, authorDetails, addToShelf } = useBookStore();
    const parens = useParams<{ id: string }>();
    useEffect(() => {
@@ -23,6 +25,20 @@ TODO:ADD TOAST FOR ADDING AUTHOR
       if (!isStored) {
          const authorShelf = createShelfAuthor(authorDetails);
          addToShelf(authorShelf, '1', shelfType);
+         toast({
+            title: 'Author is added 👍',
+            description: `Author is added in ${shelfType} shelf`,
+            duration: 800,
+            className: 'w-[200px]',
+         });
+      }
+      else {
+         toast({
+            title: 'Uh oh! Something went wrong.',
+            description: `Author is already stored in  ${shelfType} shelf`,
+            duration: 800,
+            className: 'w-[200px]',
+         });
       }
    };
    return (

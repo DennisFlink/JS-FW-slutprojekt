@@ -11,7 +11,6 @@ export const Statistics = () => {
       return accumulator.concat(bookAuthors);
    }, []);
    const mostCommonAuthor = findMostCommonAuthor(allAuthors);
-   console.log('NMNOSAOIAS', mostCommonAuthor);
    const averagePages = averagePageCalc(totalPages, shelf.read.length);
    const averageRating = averageScore(totalRating, shelf.read.length);
 
