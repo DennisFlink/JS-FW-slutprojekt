@@ -31,7 +31,7 @@ export type responeTypeAuthor = {
 
 export type authorDetailResponse = {
    name: string;
-   bio?: string;
+   bio?: string | { type: string; value: string };
    birth_date?: string;
 };
 
