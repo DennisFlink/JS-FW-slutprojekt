@@ -46,6 +46,7 @@ export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
             title: 'Review updated succcessfully!',
             description: `Review is updated`,
             duration: 1000,
+            className: 'w-[200px]',
          });
       } else {
          addReview(reviewWithId);
@@ -53,6 +54,7 @@ export const BookReview: React.FC<BookReview> = ({ isopen, onClose }) => {
             title: 'Thank you for your review',
             description: `Review is added`,
             duration: 1000,
+            className: 'w-[200px]',
          });
       }
    };
