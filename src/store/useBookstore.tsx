@@ -110,7 +110,7 @@ export const useBookStore = create<State>((set) => ({
             authornames.push(authorResponse.name);
          }
          const bookDetailsWithUUID = { ...responseData, id: bookId };
-
+         console.log(responseData);
          set(() => ({ bookDetails: { ...bookDetailsWithUUID, authornames }, loading: false }));
       } catch (err) {
          set(() => ({ hasErrors: true, loading: false }));

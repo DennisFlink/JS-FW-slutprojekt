@@ -77,7 +77,7 @@ export const BookDisplay = () => {
                   </div>
                </div>
                <div className="p-4  text-center">
-                  <h3 className="text-ellipsis overflow-x-hidden">{bookDetails.description?.value ? bookDetails.description.value : 'Sorry, No Description 😢'}</h3>
+                  <h3 className="text-ellipsis overflow-x-hidden">{typeof bookDetails.description === 'string' ? bookDetails.description : bookDetails.description?.value}</h3>
                </div>
                <div className="flex flex-wrap gap-2 w-full justify-center">
                   {bookDetails.subjects?.slice(0, 10).map((item, index) => (

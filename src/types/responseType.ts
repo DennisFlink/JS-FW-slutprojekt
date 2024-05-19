@@ -45,7 +45,7 @@ export type Author = {
 
 export type bookDetailData = {
    title: string;
-   description?: descriptionData;
+   description?: string | descriptionData;
    subtitle?: string;
    key: string;
    id: string;
